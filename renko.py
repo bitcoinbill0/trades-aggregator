@@ -47,8 +47,8 @@ def build_blocks(df, blocks):
                 current_block['high'] = row['price']
             elif row['price'] < current_block['low']:
                 current_block['low'] = row['price']
-            if (row['price'] > (current_block['open'] + (int(sys.argv[1]) * 0.5))) or \
-                (row['price'] < (current_block['open'] - (int(sys.argv[1]) * 0.5))):
+            if (row['price'] >= (current_block['open'] + (int(sys.argv[1]) * 0.5))) or \
+                (row['price'] <= (current_block['open'] - (int(sys.argv[1]) * 0.5))):
                 ts = datetime.strptime(row['timestamp'].split('.')[0], '%Y-%m-%dD%H:%M:%S')
                 add_block(dict(current_block), blocks, ts)
                 current_block = {}

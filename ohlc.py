@@ -19,9 +19,9 @@ input_files.sort()
 # increment the volume of the current candle
 def inc_vol(row, current_candle):
     if row['side'] == 'Sell':
-        current_candle['buy_volume'] += row['size']
-    else:
         current_candle['sell_volume'] += row['size']
+    else:
+        current_candle['buy_volume'] += row['size']
 
 # save a new candle
 def add_candle(current_candle, candlesticks, ts):

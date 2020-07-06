@@ -34,7 +34,7 @@ def build_candles(df, candlesticks):
     current_candle = {}
     ts = None
     for index, row in df.iterrows():
-        ts = datetime.strptime(row['timestamp'].split('.')[0], '%Y-%m-%dD%H:%M:%S')
+        ts = datetime.strptime(row['timestamp'].split('.')[0], '%Y-%m-%dD%H:%M:%S').replace(second=0)
         if not current_candle:
             current_candle['open'] = row['price']
             current_candle['low'] = row['price']
@@ -50,10 +50,12 @@ def build_candles(df, candlesticks):
                 current_candle['high'] = row['price']
             elif row['price'] < current_candle['low']:
                 current_candle['low'] = row['price']
-            if current_candle['timestamp'] + timedelta(seconds=(60 * int(sys.argv[1]))) < ts:
+            if ts - timedelta(seconds=(60 * int(sys.argv[1]))) \
+                >= current_candle['timestamp']:
                 add_candle(dict(current_candle), candlesticks, ts)
                 current_candle = {}
-    add_candle(current_candle, candlesticks, ts)
+    ts = ts + timedelta(seconds=60)
+    add_candle(dict(current_candle), candlesticks, ts)
 
 # parse input file and save to CSV as candlesticks
 def parse_file(file):
